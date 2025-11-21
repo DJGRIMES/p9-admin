@@ -4,6 +4,7 @@ import FountList from "./pages/FountList";
 import FountDetail from "./pages/FountDetail";
 import InviteList from "./pages/InviteList";
 import InviteDetail from "./pages/InviteDetail";
+import InviteMinter from "./pages/InviteMinter";
 import ReceiptList from "./pages/ReceiptList";
 import ReceiptDetail from "./pages/ReceiptDetail";
 import AdminLayout from "./layouts/AdminLayout";
@@ -17,6 +18,7 @@ export const routes: RouteObject[] = [
       { path: "founts", element: <FountList /> },
       { path: "founts/:id", element: <FountDetail /> },
       { path: "invites", element: <InviteList /> },
+      { path: "invites/mint", element: <InviteMinter /> },
       { path: "invites/:id", element: <InviteDetail /> },
       { path: "receipts", element: <ReceiptList /> },
       { path: "receipts/:id", element: <ReceiptDetail /> }
