@@ -31,15 +31,20 @@ const InviteList: React.FC = () => {
         </tbody>
       </table>
 
-      <button
-        type="button"
-        onClick={() => {
-          // TODO: open Mint Invite dialog
-          alert("Mint Invite dialog placeholder");
+      <Link
+        to="/invites/mint"
+        style={{
+          display: "inline-block",
+          marginTop: "1rem",
+          padding: "0.5rem 0.75rem",
+          background: "#1f2937",
+          color: "white",
+          textDecoration: "none",
+          borderRadius: "4px"
         }}
       >
         Mint New Invite
-      </button>
+      </Link>
     </div>
   );
 };
