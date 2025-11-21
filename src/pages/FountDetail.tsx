@@ -1,0 +1,1 @@
+// Fount detail page placeholder.

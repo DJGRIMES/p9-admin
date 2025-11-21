@@ -1,0 +1,1 @@
+// Invite detail page placeholder.
