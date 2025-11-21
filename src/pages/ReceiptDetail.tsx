@@ -1,0 +1,1 @@
+// Receipt detail page placeholder.

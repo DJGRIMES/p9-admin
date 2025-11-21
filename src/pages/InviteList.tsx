@@ -1,0 +1,1 @@
+// Invite list page placeholder.
