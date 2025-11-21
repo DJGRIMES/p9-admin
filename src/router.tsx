@@ -1,5 +1,4 @@
-import React from "react";
-import { RouteObject } from "react-router-dom";
+import type { RouteObject } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import FountList from "./pages/FountList";
 import FountDetail from "./pages/FountDetail";
