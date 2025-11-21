@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_P9_BASE_URL ?? "";
+const BASE_URL = import.meta.env.VITE_P9_BASE_URL ?? "http://localhost:3007";
 
 export class ApiError extends Error {
   status: number;
@@ -12,8 +12,16 @@ export class ApiError extends Error {
   }
 }
 
+function buildUrl(path: string): string {
+  if (!BASE_URL) {
+    throw new ApiError("Missing VITE_P9_BASE_URL for backend calls", 500);
+  }
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  return `${BASE_URL}${normalizedPath}`;
+}
+
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
-  const url = `${BASE_URL}${path}`;
+  const url = buildUrl(path);
   const headers = new Headers(options.headers);
   if (!headers.has("Content-Type")) {
     headers.set("Content-Type", "application/json");
@@ -43,5 +51,11 @@ export const apiClient = {
   },
   post<T>(path: string, body?: unknown): Promise<T> {
     return request<T>(path, { method: "POST", body: JSON.stringify(body ?? {}) });
+  },
+  castSpell<T>(spellName: string, payload?: unknown): Promise<T> {
+    return request<T>(`/magic/spell/${spellName}`, {
+      method: "POST",
+      body: JSON.stringify(payload ?? {})
+    });
   }
 };
