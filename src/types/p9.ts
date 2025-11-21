@@ -5,16 +5,23 @@ export interface Fount {
   public_key: string;
   state: FountState;
   metadata?: {
-    origin?: string;      // e.g. "invite_token"
-    origin_ref?: string;  // e.g. inv_UUID
+    origin?: string; // e.g. "invite_token"
+    origin_ref?: string; // e.g. inv_UUID
     notes?: string | null;
   };
   created_at?: string;
   updated_at?: string;
 }
 
+export interface SpellbookEntry {
+  spell: string;
+  description?: string;
+  last_used_at?: string | null;
+  mp_cost?: number;
+}
+
 export interface Pref {
-  id: string;       // pref_UUID
+  id: string; // pref_UUID
   fount_id: string; // link to Fount
   settings: {
     language?: string;
@@ -31,7 +38,7 @@ export interface Pref {
 }
 
 export interface Prof {
-  id: string;       // prof_UUID
+  id: string; // prof_UUID
   fount_id: string; // link to Fount
   profile: {
     display_name?: string | null;
@@ -55,7 +62,7 @@ export interface InviteToken {
   sponsor_fount_id: string;
   claimed_fount_id?: string | null;
   context?: {
-    type?: string;  // e.g. "admin_invite"
+    type?: string; // e.g. "admin_invite"
     label?: string | null;
     note?: string | null;
   };
@@ -102,7 +109,7 @@ export interface Receipt {
   };
 
   metadata?: {
-    source?: string;          // e.g. "pos_system_1"
+    source?: string; // e.g. "pos_system_1"
     linked_invite_id?: string | null;
   };
 

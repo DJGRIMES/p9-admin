@@ -1,35 +1,62 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { listInvites } from "../api/invite";
+import type { InviteToken } from "../types/p9";
+import { ApiError } from "../api/client";
 
 const InviteList: React.FC = () => {
-  // TODO: replace mock data with API
-  const mockInvites = [
-    { id: "inv_1", short_code: "AB7Q-FL9P", status: "unclaimed" },
-    { id: "inv_2", short_code: "ZZ99-TEST", status: "claimed" }
-  ];
+  const [invites, setInvites] = useState<InviteToken[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadInvites() {
+      try {
+        const response = await listInvites();
+        setInvites(response.invites);
+      } catch (err) {
+        const apiErr = err as ApiError;
+        setError(apiErr.message || "Unable to pull invite spell list.");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    void loadInvites();
+  }, []);
 
   return (
     <div>
       <h2>Invite Tokens</h2>
-      <p>Manage and inspect invite tokens.</p>
-      <table>
-        <thead>
-          <tr>
-            <th>Short Code</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {mockInvites.map((inv) => (
-            <tr key={inv.id}>
-              <td>
-                <Link to={`/invites/${inv.id}`}>{inv.short_code}</Link>
-              </td>
-              <td>{inv.status}</td>
+      <p>Manage and inspect invite tokens resolved via MAGIC spells.</p>
+
+      {loading ? <p>Loading invite spells...</p> : null}
+      {error ? <p style={{ color: "#b00020" }}>Error: {error}</p> : null}
+
+      {!loading && !error ? (
+        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+          <thead>
+            <tr>
+              <th style={{ textAlign: "left", borderBottom: "1px solid #e5e7eb", padding: "0.5rem" }}>
+                Short Code
+              </th>
+              <th style={{ textAlign: "left", borderBottom: "1px solid #e5e7eb", padding: "0.5rem" }}>
+                Status
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {invites.map((inv) => (
+              <tr key={inv.id}>
+                <td style={{ padding: "0.5rem", borderBottom: "1px solid #f3f4f6" }}>
+                  <Link to={`/invites/${inv.id}`}>{inv.short_code}</Link>
+                </td>
+                <td style={{ padding: "0.5rem", borderBottom: "1px solid #f3f4f6" }}>{inv.status}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : null}
 
       <Link
         to="/invites/mint"
@@ -50,4 +77,3 @@ const InviteList: React.FC = () => {
 };
 
 export default InviteList;
-// Invite list page placeholder.

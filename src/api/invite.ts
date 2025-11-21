@@ -20,8 +20,24 @@ export interface MintInviteResponse {
   invites: InviteToken[];
 }
 
+export interface InviteListResponse {
+  invites: InviteToken[];
+}
+
+export interface InviteResponse {
+  invite: InviteToken;
+}
+
 export async function mintInvites(
   payload: MintInviteRequest
 ): Promise<MintInviteResponse> {
-  return apiClient.post<MintInviteResponse>("/admin/invites/mint", payload);
+  return apiClient.castSpell<MintInviteResponse>("mintInvites", payload);
+}
+
+export function listInvites(): Promise<InviteListResponse> {
+  return apiClient.castSpell<InviteListResponse>("listInvites");
+}
+
+export function fetchInvite(inviteId: string): Promise<InviteResponse> {
+  return apiClient.castSpell<InviteResponse>("getInvite", { invite_id: inviteId });
 }
