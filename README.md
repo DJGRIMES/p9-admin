@@ -71,3 +71,13 @@ export default defineConfig([
   },
 ])
 ```
+
+## Verifying the local API proxy
+
+Use these steps to confirm backend calls work without CORS issues during development:
+
+1. Start the P9 backend locally so port `3007` responds to the minting endpoints.
+2. From this repo, run `npm run dev` and open `http://localhost:5173/invites/mint`.
+3. Submit the "Mint Tokens" form while DevTools → Network is open.
+4. Ensure the request URL begins with `http://localhost:5173/api/` and succeeds without CORS errors while being forwarded to `http://localhost:3007/...`.
+5. Verify the UI shows the minted tokens or a clear backend error message.

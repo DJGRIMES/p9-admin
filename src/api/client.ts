@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_P9_BASE_URL ?? "http://localhost:3007";
+const BASE_URL = import.meta.env.VITE_P9_BASE_URL ?? "/api";
 
 export class ApiError extends Error {
   status: number;
@@ -27,22 +27,28 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
     headers.set("Content-Type", "application/json");
   }
 
-  const response = await fetch(url, { ...options, headers });
-  const contentType = response.headers.get("content-type");
-  const isJson = contentType?.includes("application/json");
+  try {
+    const response = await fetch(url, { ...options, headers });
+    const contentType = response.headers.get("content-type");
+    const isJson = contentType?.includes("application/json");
 
-  const payload = isJson ? await response.json() : await response.text();
+    const payload = isJson ? await response.json() : await response.text();
 
-  if (!response.ok) {
-    const message =
-      (isJson && typeof payload === "object" && payload !== null && "message" in payload
-        ? String((payload as Record<string, unknown>).message)
-        : undefined) || response.statusText || "API request failed";
+    if (!response.ok) {
+      const message =
+        (isJson && typeof payload === "object" && payload !== null && "message" in payload
+          ? String((payload as Record<string, unknown>).message)
+          : undefined) || response.statusText || "API request failed";
 
-    throw new ApiError(message, response.status, payload);
+      console.error("API error", { url, status: response.status, payload });
+      throw new ApiError(message, response.status, payload);
+    }
+
+    return payload as T;
+  } catch (err) {
+    console.error("Network or fetch error", { url, err });
+    throw err;
   }
-
-  return payload as T;
 }
 
 export const apiClient = {
